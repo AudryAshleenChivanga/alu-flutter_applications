@@ -53,230 +53,128 @@ class _TemperatureConverterHomeState extends State<TemperatureConverterHome> {
         title: Text('Temperature Converter by Audry Ashleen Chivanga'),
         centerTitle: true,
       ),
-      body: OrientationBuilder(
-        builder: (context, orientation) {
+      body: LayoutBuilder(
+        builder: (context, constraints) {
           return Padding(
             padding: const EdgeInsets.all(16.0),
-            child: orientation == Orientation.portrait
-                ? _buildPortraitLayout()
-                : _buildLandscapeLayout(),
+            child: constraints.maxWidth < 600
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: _buildWidgets(),
+                  )
+                : Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: _buildWidgets(),
+                        ),
+                      ),
+                    ],
+                  ),
           );
         },
       ),
     );
   }
 
-  // Layout for portrait orientation
-  Widget _buildPortraitLayout() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        // Heading
-        Text(
-          'Convert Temperature',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
+  List<Widget> _buildWidgets() {
+    return [
+      // Heading
+      Text(
+        'Convert Temperature',
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      SizedBox(height: 16),
+
+      // Text Input for Temperature
+      TextField(
+        controller: _controller,
+        decoration: InputDecoration(
+          labelText: 'Enter temperature',
+          border: OutlineInputBorder(),
+          suffixIcon: Icon(Icons.thermostat),
         ),
-        SizedBox(height: 16),
+        keyboardType: TextInputType.number,
+      ),
+      SizedBox(height: 16),
 
-        // Text Input for Temperature
-        TextField(
-          controller: _controller,
-          decoration: InputDecoration(
-            labelText: 'Enter temperature',
-            border: OutlineInputBorder(),
-            suffixIcon: Icon(Icons.thermostat),
-          ),
-          keyboardType: TextInputType.number,
-        ),
-        SizedBox(height: 16),
-
-        // Dropdown for Conversion Type
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Convert:'),
-            SizedBox(width: 8),
-            DropdownButton<String>(
-              value: _conversionType,
-              onChanged: (String? newValue) {
-                setState(() {
-                  _conversionType = newValue!;
-                });
-              },
-              items: <String>[
-                "Celsius to Fahrenheit",
-                "Fahrenheit to Celsius",
-              ].map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-          ],
-        ),
-        SizedBox(height: 16),
-
-        // Convert Button
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.orange[300], // Light orange button
-          ),
-          onPressed: _convertTemperature, // Call conversion function here
-          child: Text('Convert Temperature'),
-        ),
-
-        SizedBox(height: 16),
-
-        // Display Result
-        Text(
-          _result,
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(height: 16),
-
-        // Divider
-        Divider(
-          color: const Color.fromARGB(255, 167, 130, 130),
-          thickness: 1,
-        ),
-
-        // Conversion History Heading
-        Text(
-          'Conversion History',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(height: 8),
-
-        // History List
-        Expanded(
-          child: ListView.builder(
-            itemCount: _conversionHistory.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: Icon(Icons.history),
-                title: Text(
-                  _conversionHistory[index],
-                  style: TextStyle(fontSize: 16),
-                ),
-              );
+      // Dropdown for Conversion Type
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Convert:'),
+          SizedBox(width: 8),
+          DropdownButton<String>(
+            value: _conversionType,
+            onChanged: (String? newValue) {
+              setState(() {
+                _conversionType = newValue!;
+              });
             },
+            items: <String>[
+              "Celsius to Fahrenheit",
+              "Fahrenheit to Celsius",
+            ].map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
           ),
+        ],
+      ),
+      SizedBox(height: 16),
+
+      // Convert Button
+      ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.orange[300],
         ),
-      ],
-    );
-  }
+        onPressed: _convertTemperature,
+        child: Text('Convert Temperature'),
+      ),
+      SizedBox(height: 16),
 
-  // Layout for landscape orientation
-  Widget _buildLandscapeLayout() {
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            children: [
-              // Heading
-              Text(
-                'Convert Temperature',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
+      // Display Result
+      Text(
+        _result,
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      SizedBox(height: 16),
+
+      // Divider
+      Divider(
+        color: const Color.fromARGB(255, 187, 135, 135),
+        thickness: 1,
+      ),
+      SizedBox(height: 16),
+
+      // Conversion History Heading
+      Text(
+        'Conversion History',
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      ),
+      SizedBox(height: 8),
+
+      // History List
+      Expanded(
+        child: ListView.builder(
+          itemCount: _conversionHistory.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              leading: Icon(Icons.history),
+              title: Text(
+                _conversionHistory[index],
+                style: TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 16),
-
-              // Text Input for Temperature
-              TextField(
-                controller: _controller,
-                decoration: InputDecoration(
-                  labelText: 'Enter temperature',
-                  border: OutlineInputBorder(),
-                  suffixIcon: Icon(Icons.thermostat),
-                ),
-                keyboardType: TextInputType.number,
-              ),
-              SizedBox(height: 16),
-
-              // Dropdown for Conversion Type
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Convert:'),
-                  SizedBox(width: 8),
-                  DropdownButton<String>(
-                    value: _conversionType,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _conversionType = newValue!;
-                      });
-                    },
-                    items: <String>[
-                      "Celsius to Fahrenheit",
-                      "Fahrenheit to Celsius",
-                    ].map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-
-              // Convert Button
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange[300],
-                ),
-                onPressed: _convertTemperature,
-                child: Text('Convert Temperature'),
-              ),
-
-              SizedBox(height: 16),
-
-              // Display Result
-              Text(
-                _result,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
+            );
+          },
         ),
-        VerticalDivider(
-          color: const Color.fromARGB(255, 167, 130, 130),
-          thickness: 1,
-        ),
-        Expanded(
-          child: Column(
-            children: [
-              Text(
-                'Conversion History',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 8),
-
-              // History List
-              Expanded(
-                child: ListView.builder(
-                  itemCount: _conversionHistory.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      leading: Icon(Icons.history),
-                      title: Text(
-                        _conversionHistory[index],
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+      ),
+    ];
   }
 }
