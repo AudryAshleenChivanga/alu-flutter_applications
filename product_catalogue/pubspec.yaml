@@ -1,0 +1,46 @@
+name: product_catalogue
+description: "A new Flutter project."
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Adds Cupertino icons, which are useful for iOS-style icons
+  cupertino_icons: ^1.0.8
+
+  # GetX for state management and navigation
+  get: ^4.6.5
+
+  # GetStorage for handling simple key-value storage (optional but useful for persistent storage)
+  get_storage: ^2.0.3
+
+  # Flutter lints for good coding practices
+  flutter_lints: ^4.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+
+  # Ensures Material Icons font is included for using Material icons
+  uses-material-design: true
+
+  # Uncomment the following lines if you have assets to add
+  # assets:
+  #   - images/product1.png
+  #   - images/product2.png
+
+  # Uncomment the following lines if you plan to use custom fonts
+  # fonts:
+  #   - family: CustomFont
+  #     fonts:
+  #       - asset: fonts/CustomFont-Regular.ttf
+  #       - asset: fonts/CustomFont-Bold.ttf
